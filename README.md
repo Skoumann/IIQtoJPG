@@ -33,6 +33,8 @@ The **IIQ to JPG Converter** is a desktop application that allows you convert II
 
 ## Usage
 
+![2024-10-08_16-09-16](https://github.com/user-attachments/assets/74e9117d-f879-4302-a9a5-13891e53353e)
+
 1. **Open the Application**
 
    - Launch **IIQ to JPG Converter** from the Start Menu or desktop shortcut.
