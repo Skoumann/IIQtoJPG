@@ -4,17 +4,6 @@ A user-friendly GUI application to convert IIQ image files to JPG format.
 
 ![1024 logo](https://github.com/user-attachments/assets/6d3fc981-10cf-4b23-a5fc-c76bdd5df3e2)
 
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Installation](#installation)
-  - [Prerequisites](#prerequisites)
-  - [Download and Install](#download-and-install)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
-
 
 ## Introduction
 
@@ -31,7 +20,7 @@ The **IIQ to JPG Converter** is a desktop application that allows you convert II
 
 1. **Download the Installer**
 
-   - Get the latest version of the installer from the [Releases](https://github.com/yourusername/IIQtoJPG-Converter/releases) page.
+   - Get the latest version of the installer from the [Releases](https://github.com/Skoumann/IIQtoJPG/releases/tag/pre-release) page.
 
 2. **Run the Installer**
 
