@@ -7,7 +7,6 @@ A user-friendly GUI application to convert IIQ image files to JPG format.
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [Features](#features)
 - [Installation](#installation)
   - [Prerequisites](#prerequisites)
   - [Download and Install](#download-and-install)
@@ -19,15 +18,7 @@ A user-friendly GUI application to convert IIQ image files to JPG format.
 
 ## Introduction
 
-The **IIQ to JPG Converter** is a desktop application that allows photographers and image enthusiasts to convert IIQ (Phase One RAW image files) to the widely supported JPG format. The application provides a simple and intuitive interface, making the conversion process straightforward and efficient.
-
-## Features
-
-- **Batch Conversion**: Convert multiple IIQ files at once.
-- **Progress Monitoring**: Real-time progress bar to track conversion status.
-- **Custom Output Directory**: Specify the destination folder for converted images.
-- **User-Friendly Interface**: Easy-to-use GUI with a dark theme.
-- **Lightweight**: Minimal dependencies and quick installation.
+The **IIQ to JPG Converter** is a desktop application that allows you convert IIQ (Phase One RAW image files) to the widely supported JPG format. The application provides a simple and intuitive interface on top of the phase one imageSDK.
 
 ## Installation
 
