@@ -23,7 +23,7 @@ The **IIQ to JPG Converter** is a desktop application that allows you convert II
 
 1. **Download the Installer**
 
-   - Get the latest version of the installer from the [Releases](https://github.com/Skoumann/IIQtoJPG/releases/tag/pre-release) page.
+   - Get the latest version of the installer from the [Releases](https://github.com/Skoumann/IIQtoJPG/releases) page.
 
 2. **Run the Installer**
 
