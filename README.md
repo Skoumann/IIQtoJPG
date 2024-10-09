@@ -1,3 +1,6 @@
+# Known bugs
+There is a known bug in the ImageSDK with a memory leak and therefore i convert the files in batches of 5 and reset the ImageSDK as a HOTFIX.
+
 # IIQ to JPG Converter
 
 A user-friendly GUI application to convert IIQ image files to JPG format.
