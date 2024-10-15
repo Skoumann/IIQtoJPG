@@ -62,7 +62,7 @@ exe = EXE(
     strip=False,
     upx=True,
     console=False,
-    icon='C:\\Users\\fhe\\coding\\newdumdum\\v2\\256 Logo.ico'  # Update this path
+    icon='C:\\Users\\fhe\\coding\\IIQtoJPG\\logo.ico'  # Update this path
 )
 
 coll = COLLECT(
