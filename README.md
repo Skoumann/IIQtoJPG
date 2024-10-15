@@ -5,7 +5,8 @@ There is a known bug in the ImageSDK with a memory leak and therefore i convert 
 
 A user-friendly GUI application to convert IIQ image files to JPG format.
 
-![1024 logo](https://github.com/user-attachments/assets/6d3fc981-10cf-4b23-a5fc-c76bdd5df3e2)
+
+<img width="302" alt="2024-10-15_10-11-31" src="https://github.com/user-attachments/assets/5a1a976d-48a1-42a6-818c-8a10c1f88ea7">
 
 
 ## Introduction
@@ -17,7 +18,7 @@ The **IIQ to JPG Converter** is a desktop application that allows you convert II
 ### Prerequisites
 
 - **Operating System**: Windows 10 or later (64-bit).
-- **.NET Runtime**: Ensure that the .NET 6.0 Runtime is installed. If not, download it from [Microsoft's official website](https://dotnet.microsoft.com/download/dotnet/6.0/runtime).
+- **.NET Runtime**: Ensure that the .NET 6.0 Runtime is installed.
 
 ### Download and Install
 
@@ -36,7 +37,6 @@ The **IIQ to JPG Converter** is a desktop application that allows you convert II
 
 ## Usage
 
-![2024-10-08_16-09-16](https://github.com/user-attachments/assets/74e9117d-f879-4302-a9a5-13891e53353e)
 
 1. **Open the Application**
 
