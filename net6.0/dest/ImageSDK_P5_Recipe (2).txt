@@ -77,7 +77,7 @@
     ],
     "haloSuppressionAmount": 0.0,
     "height": 0,
-    "highlightRecovery": -0.5,
+    "highlightRecovery": 0.5,
     "highlightRecoveryEnabled": true,
     "lightFalloffCorrectionEnabled": true,
     "linearPathType": 0,
