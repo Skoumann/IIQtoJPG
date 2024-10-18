@@ -3,3 +3,4 @@ dist
 __pycache__/
 dest/dotnet-sdk-8.0.403-win-x64.exe
 Output
+net6.0\dest\dotnet-sdk-8.0.403-win-x64.exe
