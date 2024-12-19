@@ -1,0 +1,125 @@
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using P1.ImageSdk;
+
+namespace HelloWorld
+{
+    class Program
+    {
+        static byte[] _buffer = new byte[64 * 1024 * 1024];
+
+        static void Main(string[] args)
+        {
+            // Setup the path to the SensorProfiles
+            Sdk.SetSensorProfilesLocation("dest\\SensorProfiles");
+
+            Console.WriteLine("Started at " + DateTime.Now);
+            var totalSw = Stopwatch.StartNew();
+
+            if (args.Length < 2)
+            {
+                Console.WriteLine("Usage: <program> <in directory> <out directory>");
+                return;
+            }
+
+            var inputDir = args[0];
+            var outputDir = args[1];
+
+            if (!Directory.Exists(inputDir))
+            {
+                Console.WriteLine($"Input directory does not exist: {inputDir}");
+                return;
+            }
+
+            if (!Directory.Exists(outputDir))
+            {
+                Console.WriteLine($"Output directory does not exist: {outputDir}");
+                return;
+            }
+
+            var iiqFiles = Directory.EnumerateFiles(inputDir)
+                .Where(file => Path.GetExtension(file).Equals(".iiq", StringComparison.InvariantCultureIgnoreCase))
+                .ToArray();
+
+            if (iiqFiles.Length == 0)
+            {
+                Console.WriteLine("No IIQ files found in the input directory.");
+                return;
+            }
+
+            Console.WriteLine($"Found {iiqFiles.Length} images. Processing...");
+            for (int i = 0; i < iiqFiles.Length; i++)
+            {
+                var image = iiqFiles[i];
+                Console.WriteLine($"Processing {Path.GetFileName(image)} ({i + 1}/{iiqFiles.Length})...");
+
+                var success = ConvertAndWriteImage(image, outputDir);
+                if (!success)
+                {
+                    Console.WriteLine($"Failed to process {Path.GetFileName(image)}.");
+                }
+            }
+
+            totalSw.Stop();
+            Console.WriteLine($"All conversions completed in {totalSw.Elapsed.TotalSeconds:F2}s.");
+        }
+
+        private static bool ConvertAndWriteImage(string srcFilePath, string outputDir)
+        {
+            string filenameWithoutExtension = Path.GetFileNameWithoutExtension(srcFilePath);
+            string destPath = Path.Combine(outputDir, filenameWithoutExtension + ".jpg");
+
+            try
+            {
+                double outputFocalLength = 0.0;
+
+                // Load the raw image
+                var rawImage = new RawImage(srcFilePath);
+
+                // Load the conversion configuration
+                var config = ConvertConfig.LoadFromFile("dest\\ImageSDK_P5_Recipe (2).txt");
+                if (config == null)
+                {
+                    Console.WriteLine("Failed to load conversion configuration.");
+                    return false;
+                }
+
+                // Apply the conversion configuration
+                var bitmap = config.ApplyTo(rawImage);
+                if (bitmap == null)
+                {
+                    Console.WriteLine("Failed to apply configuration to image.");
+                    return false;
+                }
+
+                // Set JPEG configuration with Pix4D parameters
+                var jpegConfig = new JpegConfig
+                {
+                    quality = 90,
+                    commonConfig =
+                    {
+                        includeDistortionParameters = DistortionParamType.pix4d,
+                        includeMetricCalibration = true,
+                        overWriteOutputFocalLength = outputFocalLength
+                    }
+                };
+
+                // Write the converted image as a JPEG
+                var success = rawImage.WriteAsJpeg(destPath, bitmap, jpegConfig);
+                return success;
+            }
+            catch (SdkException e)
+            {
+                Console.WriteLine($"SDK error {e.Code}: {e.Message}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Unexpected error: {e.Message}");
+            }
+
+            return false;
+        }
+    }
+}
