@@ -8,41 +8,47 @@ namespace HelloWorld
 {
     class Program
     {
+        // Buffer used internally for processing large images
         static byte[] _buffer = new byte[64 * 1024 * 1024];
 
         static void Main(string[] args)
         {
-            // Setup the path to the SensorProfiles
+            // Set the path for sensor profiles used by the SDK
             Sdk.SetSensorProfilesLocation("dest\\SensorProfiles");
 
             Console.WriteLine("Started at " + DateTime.Now);
-            var totalSw = Stopwatch.StartNew();
+            var totalSw = Stopwatch.StartNew(); // Start tracking total processing time
 
+            // Ensure the correct number of arguments (input and output directories) are provided
             if (args.Length < 2)
             {
                 Console.WriteLine("Usage: <program> <in directory> <out directory>");
                 return;
             }
 
-            var inputDir = args[0];
-            var outputDir = args[1];
+            var inputDir = args[0]; // First argument is the input directory
+            var outputDir = args[1]; // Second argument is the output directory
 
+            // Check if the input directory exists
             if (!Directory.Exists(inputDir))
             {
                 Console.WriteLine($"Input directory does not exist: {inputDir}");
                 return;
             }
 
+            // Check if the output directory exists
             if (!Directory.Exists(outputDir))
             {
                 Console.WriteLine($"Output directory does not exist: {outputDir}");
                 return;
             }
 
+            // Get all files with the .iiq extension from the input directory
             var iiqFiles = Directory.EnumerateFiles(inputDir)
                 .Where(file => Path.GetExtension(file).Equals(".iiq", StringComparison.InvariantCultureIgnoreCase))
                 .ToArray();
 
+            // Exit if no IIQ files are found in the input directory
             if (iiqFiles.Length == 0)
             {
                 Console.WriteLine("No IIQ files found in the input directory.");
@@ -50,11 +56,14 @@ namespace HelloWorld
             }
 
             Console.WriteLine($"Found {iiqFiles.Length} images. Processing...");
+            
+            // Loop through each IIQ file and process it
             for (int i = 0; i < iiqFiles.Length; i++)
             {
                 var image = iiqFiles[i];
                 Console.WriteLine($"Processing {Path.GetFileName(image)} ({i + 1}/{iiqFiles.Length})...");
 
+                // Call the method to convert and write the image
                 var success = ConvertAndWriteImage(image, outputDir);
                 if (!success)
                 {
@@ -62,23 +71,29 @@ namespace HelloWorld
                 }
             }
 
-            totalSw.Stop();
+            totalSw.Stop(); // Stop the stopwatch for total processing time
             Console.WriteLine($"All conversions completed in {totalSw.Elapsed.TotalSeconds:F2}s.");
         }
 
+        /// <summary>
+        /// Converts a raw IIQ image to a JPEG and writes it to the output directory.
+        /// </summary>
+        /// <param name="srcFilePath">Path to the source IIQ file</param>
+        /// <param name="outputDir">Output directory for the JPEG</param>
+        /// <returns>True if the conversion was successful; otherwise, false</returns>
         private static bool ConvertAndWriteImage(string srcFilePath, string outputDir)
         {
-            string filenameWithoutExtension = Path.GetFileNameWithoutExtension(srcFilePath);
-            string destPath = Path.Combine(outputDir, filenameWithoutExtension + ".jpg");
+            string filenameWithoutExtension = Path.GetFileNameWithoutExtension(srcFilePath); // Extract the filename
+            string destPath = Path.Combine(outputDir, filenameWithoutExtension + ".jpg"); // Construct the destination file path
 
             try
             {
-                double outputFocalLength = 0.0;
+                double outputFocalLength = 0.0; // Set the focal length override value
 
-                // Load the raw image
+                // Load the raw image using the SDK
                 var rawImage = new RawImage(srcFilePath);
 
-                // Load the conversion configuration
+                // Load the conversion configuration from a predefined file
                 var config = ConvertConfig.LoadFromFile("dest\\ImageSDK_P5_Recipe (2).txt");
                 if (config == null)
                 {
@@ -86,7 +101,7 @@ namespace HelloWorld
                     return false;
                 }
 
-                // Apply the conversion configuration
+                // Apply the configuration to the raw image
                 var bitmap = config.ApplyTo(rawImage);
                 if (bitmap == null)
                 {
@@ -94,32 +109,34 @@ namespace HelloWorld
                     return false;
                 }
 
-                // Set JPEG configuration with Pix4D parameters
+                // Set JPEG configuration parameters, including Pix4D-specific options
                 var jpegConfig = new JpegConfig
                 {
-                    quality = 90,
+                    quality = 90, // Set JPEG quality
                     commonConfig =
                     {
-                        includeDistortionParameters = DistortionParamType.pix4d,
-                        includeMetricCalibration = true,
-                        overWriteOutputFocalLength = outputFocalLength
+                        includeDistortionParameters = DistortionParamType.pix4d, // Include Pix4D distortion parameters
+                        includeMetricCalibration = true, // Include metric calibration data
+                        overWriteOutputFocalLength = outputFocalLength // Set focal length override
                     }
                 };
 
-                // Write the converted image as a JPEG
+                // Write the processed image to the destination path as a JPEG
                 var success = rawImage.WriteAsJpeg(destPath, bitmap, jpegConfig);
-                return success;
+                return success; // Return true if the operation was successful
             }
             catch (SdkException e)
             {
+                // Handle SDK-specific exceptions
                 Console.WriteLine($"SDK error {e.Code}: {e.Message}");
             }
             catch (Exception e)
             {
+                // Handle general exceptions
                 Console.WriteLine($"Unexpected error: {e.Message}");
             }
 
-            return false;
+            return false; // Return false if the operation failed
         }
     }
 }
